@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+@import './theme.css';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Geist Variable', sans-serif;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
