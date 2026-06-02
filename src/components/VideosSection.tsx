@@ -19,7 +19,6 @@ function getYouTubeId(url: string) {
 
 function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void }) {
   const isYT = isYouTubeUrl(item.videoUrl)
-  const videoId = isYT ? getYouTubeId(item.videoUrl) : ''
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
