@@ -1,64 +1,133 @@
-import { useState } from 'react'
-import { Play } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { X, Play } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import type { VideoItem } from '@/data/videos'
 import { FadeIn } from '@/components/FadeIn'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 
 interface VideosSectionProps {
   items: VideoItem[]
 }
 
-function getVideoId(embedUrl: string) {
-  return embedUrl.split('/embed/')[1]?.split('?')[0] ?? ''
+function isYouTubeUrl(url: string) {
+  return url.includes('youtube.com/embed')
 }
 
-function VideoCard({ item }: { item: VideoItem }) {
-  const [playing, setPlaying] = useState(false)
-  const videoId = getVideoId(item.embedUrl)
-  const thumbnail = item.posterUrl || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+function getYouTubeId(url: string) {
+  return url.split('/embed/')[1]?.split('?')[0] ?? ''
+}
+
+function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void }) {
+  const isYT = isYouTubeUrl(item.videoUrl)
+  const videoId = isYT ? getYouTubeId(item.videoUrl) : ''
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handler)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        className={`flex w-full flex-col items-center gap-3 max-w-[300px] ${item.short ? 'sm:max-w-sm' : 'sm:max-w-2xl'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button — above the video */}
+        <button
+          onClick={onClose}
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-transform hover:scale-110"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4 text-zinc-900" />
+        </button>
+
+        {/* Video */}
+        <div className="w-full overflow-hidden rounded-3xl border border-white/20 bg-black shadow-2xl">
+          <div className={`w-full aspect-9/16 ${item.short ? '' : 'sm:aspect-video'}`}>
+            {isYT ? (
+              <iframe
+                src={`${item.videoUrl}?autoplay=1&rel=0&modestbranding=1`}
+                title={item.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="h-full w-full"
+              />
+            ) : (
+              <video
+                src={item.videoUrl}
+                autoPlay
+                controls
+                playsInline
+                className="h-full w-full"
+              />
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function VideoCard({ item, onPlay }: { item: VideoItem; onPlay: () => void }) {
+  const isYT = isYouTubeUrl(item.videoUrl)
+  const videoId = isYT ? getYouTubeId(item.videoUrl) : ''
+  const thumbnail = item.posterUrl || (isYT ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '')
 
   return (
     <Card className="cursor-default overflow-hidden rounded-2xl border-zinc-100 p-0 transition-shadow hover:shadow-md">
-      <div className={`relative w-full overflow-hidden bg-black ${item.short ? 'aspect-9/16' : 'aspect-video'}`}>
-        {playing ? (
-          <iframe
-            src={`${item.embedUrl}?autoplay=1&rel=0&modestbranding=1`}
-            title={item.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 h-full w-full"
-          />
-        ) : (
-          <button
-            onClick={() => setPlaying(true)}
-            className="group relative h-full w-full"
-            aria-label={`Play ${item.title}`}
-          >
+      <button
+        onClick={onPlay}
+        className="group relative block w-full p-0 border-0"
+        aria-label={`Play ${item.title}`}
+      >
+        <div className="relative w-full overflow-hidden bg-zinc-900 aspect-video">
+          {thumbnail ? (
             <img
               src={thumbnail}
               alt={item.title}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/30" />
-            {/* Play button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <Play className="ml-1 h-5 w-5 fill-zinc-900 text-zinc-900" />
-              </div>
+          ) : (
+            <div className="h-full w-full bg-zinc-900" />
+          )}
+          <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/30" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+              <Play className="ml-1 h-5 w-5 fill-zinc-900 text-zinc-900" />
             </div>
-          </button>
-        )}
-      </div>
-      <CardContent className="px-5 py-4">
-        <h3 className="mb-1 text-sm font-semibold text-foreground">{item.title}</h3>
-        <p className="text-xs leading-relaxed text-muted-foreground">{item.description}</p>
-      </CardContent>
+          </div>
+        </div>
+      </button>
+      {item.title && (
+        <div className="px-4 pb-5 mt-0">
+          <h3 className="text-sm font-semibold text-foreground leading-none">{item.title}</h3>
+        </div>
+      )}
     </Card>
   )
 }
 
 export function VideosSection({ items }: VideosSectionProps) {
+  const [activeItem, setActiveItem] = useState<VideoItem | null>(null)
+
+  if (items.length === 0) return null
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-24 md:px-16 lg:px-24">
       <FadeIn>
@@ -77,10 +146,16 @@ export function VideosSection({ items }: VideosSectionProps) {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {items.map((item, index) => (
           <FadeIn key={item.id} delay={index * 0.08}>
-            <VideoCard item={item} />
+            <VideoCard item={item} onPlay={() => setActiveItem(item)} />
           </FadeIn>
         ))}
       </div>
+
+      <AnimatePresence>
+        {activeItem && (
+          <VideoModal item={activeItem} onClose={() => setActiveItem(null)} />
+        )}
+      </AnimatePresence>
     </section>
   )
 }

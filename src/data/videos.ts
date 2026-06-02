@@ -1,8 +1,7 @@
 export interface VideoItem {
   id: string
   title: string
-  description: string
-  embedUrl: string
+  videoUrl: string
   posterUrl: string
   short?: boolean
 }
@@ -10,30 +9,30 @@ export interface VideoItem {
 export const videosData: VideoItem[] = [
   {
     id: 'v1',
-    title: 'Product Launch — Horizon App',
-    description: '60-second commercial for a productivity mobile app.',
-    embedUrl: 'https://www.youtube.com/embed/QEq1mo2r_lU',
-    posterUrl: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&h=338&fit=crop&auto=format',
+    title: '29 Days',
+    videoUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2F29-Days.mp4?alt=media&token=ea2fcffa-6742-4291-91a4-06453cb8ae47',
+    posterUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Fvlcsnap-2026-06-02-15h34m55s022.png?alt=media&token=3e64028b-f400-495d-aed9-102a30c4c067',
+    short: true,
   },
   {
     id: 'v2',
-    title: 'Motion Graphics Reel 2024',
-    description: 'Kinetic typography, transitions, and title card animations.',
-    embedUrl: 'https://www.youtube.com/embed/qCGZuAG-vMg',
-    posterUrl: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&h=338&fit=crop&auto=format',
+    title: 'Central Travel',
+    videoUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Fcentral-travel.mp4?alt=media&token=88966722-03c0-431a-9962-4358e5bbc950',
+    posterUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Fvlcsnap-2026-06-02-15h35m28s255.png?alt=media&token=4cfe508d-3a79-476b-931e-ba52c2afd6cf',
+    short: true,
   },
   {
     id: 'v3',
-    title: 'Documentary — Studio Sessions',
-    description: 'Short-form documentary following a recording artist.',
-    embedUrl: 'https://www.youtube.com/embed/iBEvGFmcd6c',
-    posterUrl: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&h=338&fit=crop&auto=format',
+    title: 'Four Season Decks',
+    videoUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Ffour-season-decks.mp4?alt=media&token=8d1eed1d-1056-4502-8ebc-baa3bc1b14cf',
+    posterUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Fvlcsnap-2026-06-02-15h32m44s367.png?alt=media&token=16104309-f42e-4b1d-a77a-0089325d2c6d',
+    short: false,
   },
   {
     id: 'v4',
-    title: 'Brand Film — Solstice Skincare',
-    description: 'Cinematic brand film shot in natural light across three locations.',
-    embedUrl: 'https://www.youtube.com/embed/1caQ-tkgQ3A',
-    posterUrl: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&h=338&fit=crop&auto=format',
+    title: 'Hues',
+    videoUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Fhues.mp4?alt=media&token=88906310-c714-4537-998b-e8ff8df00d6c',
+    posterUrl: 'https://firebasestorage.googleapis.com/v0/b/project-2145d.firebasestorage.app/o/my-portfolio-videos%2Fvlcsnap-2026-06-02-15h34m35s079.png?alt=media&token=66171431-4d5a-4ad2-b8d7-830c72c9b5d2',
+    short: true,
   },
 ]
