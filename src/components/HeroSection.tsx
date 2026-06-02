@@ -17,13 +17,12 @@ export function HeroSection() {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            'radial-gradient(ellipse 80% 70% at 50% 50%, white 30%, transparent 100%)',
+          background: 'radial-gradient(ellipse 80% 70% at 50% 50%, white 30%, transparent 100%)',
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl">
+      <div className="relative z-10 w-full max-w-4xl md:mx-auto md:text-center">
         {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0 }}
@@ -54,7 +53,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 1.6 }}
-          className="max-w-md text-base leading-relaxed text-muted-foreground"
+          className="max-w-md text-base leading-relaxed text-muted-foreground md:mx-auto"
         >
           I'm a multidisciplinary creator working across graphic design, video production,
           and software development. I turn ideas into polished, purposeful work.
@@ -65,7 +64,7 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 2.0 }}
-          className="mt-16 flex items-center gap-2 text-xs text-zinc-400"
+          className="mt-16 flex items-center justify-center gap-2 text-xs text-zinc-400"
         >
           <span className="h-px w-8 bg-zinc-300" />
           <span>Scroll to explore</span>
