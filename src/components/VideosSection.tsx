@@ -30,13 +30,15 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
     }
   }, [onClose])
 
+  const isPortrait = item.short
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4 py-4"
       onClick={onClose}
     >
       <motion.div
@@ -44,39 +46,37 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className={`flex w-full flex-col items-center gap-3 max-w-[300px] ${item.short ? 'sm:max-w-sm' : 'sm:max-w-2xl'}`}
+        className={`flex flex-col items-center gap-3 max-h-[calc(100dvh-2rem)] ${isPortrait ? '' : 'w-full max-w-2xl'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button — above the video */}
+        {/* Close button */}
         <button
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-transform hover:scale-110"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-transform hover:scale-110"
           aria-label="Close"
         >
           <X className="h-4 w-4 text-zinc-900" />
         </button>
 
-        {/* Video */}
-        <div className="w-full overflow-hidden rounded-3xl border border-white/20 bg-black shadow-2xl">
-          <div className={`w-full aspect-9/16 ${item.short ? '' : 'sm:aspect-video'}`}>
-            {isYT ? (
-              <iframe
-                src={`${item.videoUrl}?autoplay=1&rel=0&modestbranding=1`}
-                title={item.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            ) : (
-              <video
-                src={item.videoUrl}
-                autoPlay
-                controls
-                playsInline
-                className="h-full w-full"
-              />
-            )}
-          </div>
+        {/* Video — flex-1 fills remaining height; aspect-ratio derives width for portrait */}
+        <div className={`flex-1 min-h-0 overflow-hidden rounded-3xl border border-white/20 shadow-2xl ${isPortrait ? 'aspect-[9/16]' : 'w-full aspect-video'}`}>
+          {isYT ? (
+            <iframe
+              src={`${item.videoUrl}?autoplay=1&rel=0&modestbranding=1`}
+              title={item.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          ) : (
+            <video
+              src={item.videoUrl}
+              autoPlay
+              controls
+              playsInline
+              className="h-full w-full"
+            />
+          )}
         </div>
       </motion.div>
     </motion.div>
