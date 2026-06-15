@@ -9,17 +9,7 @@ interface VideosSectionProps {
   items: VideoItem[]
 }
 
-function isYouTubeUrl(url: string) {
-  return url.includes('youtube.com/embed')
-}
-
-function getYouTubeId(url: string) {
-  return url.split('/embed/')[1]?.split('?')[0] ?? ''
-}
-
 function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void }) {
-  const isYT = isYouTubeUrl(item.videoUrl)
-
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
@@ -47,10 +37,9 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className={`flex w-full flex-col items-center gap-3 max-w-[300px] ${item.short ? '' : 'sm:max-w-2xl'}`}
+        className="flex flex-col items-center gap-3"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button — above the video */}
         <button
           onClick={onClose}
           className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-transform hover:scale-110"
@@ -59,27 +48,18 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
           <X className="h-4 w-4 text-zinc-900" />
         </button>
 
-        {/* Video */}
-        <div className="w-full overflow-hidden rounded-3xl border border-white/20 bg-black shadow-2xl">
-          <div className={`w-full aspect-9/16 ${item.short ? '' : 'sm:aspect-video'}`}>
-            {isYT ? (
-              <iframe
-                src={`${item.videoUrl}?autoplay=1&rel=0&modestbranding=1`}
-                title={item.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            ) : (
-              <video
-                src={item.videoUrl}
-                autoPlay
-                controls
-                playsInline
-                className="h-full w-full"
-              />
-            )}
-          </div>
+        <div className={`overflow-hidden rounded-3xl border border-white/20 bg-black shadow-2xl ${
+          item.short
+            ? 'h-[min(85vh,calc((100vw-4rem)*16/9))] aspect-9/16'
+            : 'w-[min(calc(100vw-2rem),56rem,calc(85vh*16/9))] aspect-video'
+        }`}>
+          <video
+            src={item.videoUrl}
+            autoPlay
+            controls
+            playsInline
+            className="h-full w-full"
+          />
         </div>
       </motion.div>
     </motion.div>
@@ -87,9 +67,7 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
 }
 
 function VideoCard({ item, onPlay }: { item: VideoItem; onPlay: () => void }) {
-  const isYT = isYouTubeUrl(item.videoUrl)
-  const videoId = isYT ? getYouTubeId(item.videoUrl) : ''
-  const thumbnail = item.posterUrl || (isYT ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '')
+  const thumbnail = item.posterUrl
 
   return (
     <Card className="cursor-default overflow-hidden rounded-2xl border-zinc-100 p-0 transition-shadow hover:shadow-md">

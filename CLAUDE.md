@@ -82,13 +82,9 @@ Geist Variable — same as shadcn.com and Vercel
 - Paths use `import.meta.env.BASE_URL` prefix for GitHub Pages compatibility
 
 ### Videos (`src/data/videos.ts`)
-- Custom play button + thumbnail facade (no YouTube UI shown until clicked)
-- On click → YouTube iframe loads with `autoplay=1`
+- Custom play button + thumbnail facade; on click → native `<video>` plays in a modal
 - `short: true` flag → uses `aspect-9/16` (portrait) instead of `aspect-video`
-- **YouTube URL format:** `https://www.youtube.com/embed/VIDEO_ID`
-  - Convert from: `https://youtu.be/ID` → `https://www.youtube.com/embed/ID`
-  - Convert from: `https://youtube.com/shorts/ID` → `https://www.youtube.com/embed/ID`
-- YouTube must have **Allow Embedding** enabled in YouTube Studio
+- Videos and poster images are hosted on Firebase Storage (`firebasestorage.googleapis.com`)
 
 ### Software (`src/data/projects.ts`)
 - `BrowserMockup` component wraps each screenshot
@@ -141,9 +137,9 @@ Then: GitHub → repo → Settings → Pages → Source → `gh-pages` branch
 2. Add an entry to `src/data/graphics.ts`
 
 ### Add a new video
-1. Upload to YouTube, enable embedding in YouTube Studio
-2. Add to `src/data/videos.ts` with `embedUrl: 'https://www.youtube.com/embed/VIDEO_ID'`
-3. Add `short: true` if it's a YouTube Short (vertical)
+1. Upload the `.mp4` and a poster image to Firebase Storage
+2. Copy the public download URLs and add an entry to `src/data/videos.ts`
+3. Set `short: true` if it's a vertical (portrait) video
 
 ### Add a new project
 1. Drop screenshot in `public/images/projects/`
