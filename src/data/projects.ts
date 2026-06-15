@@ -26,4 +26,12 @@ export const projectsData: ProjectItem[] = [
     siteUrl: 'yidcareer.org',
     tags: ['Front-end', 'Back-end'],
   },
+  {
+    id: 'p3',
+    title: 'Apple Grid',
+    description: 'EV Chargers - Powering the Future',
+    screenshotUrl: `${base}images/projects/apple-grid-website-cover.png`,
+    siteUrl: 'applegrid.com',
+    tags: ['Front-end'],
+  },
 ]

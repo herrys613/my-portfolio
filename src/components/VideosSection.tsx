@@ -23,10 +23,13 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
     return () => {
       document.removeEventListener('keydown', handler)
       document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
     }
   }, [onClose])
 
@@ -44,7 +47,7 @@ function VideoModal({ item, onClose }: { item: VideoItem; onClose: () => void })
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className={`flex w-full flex-col items-center gap-3 max-w-[300px] ${item.short ? 'sm:max-w-sm' : 'sm:max-w-2xl'}`}
+        className={`flex w-full flex-col items-center gap-3 max-w-[300px] ${item.short ? '' : 'sm:max-w-2xl'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button — above the video */}
